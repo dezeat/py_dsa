@@ -1,10 +1,10 @@
 import pytest
 
-from binary_search.binary_search import binary_search
+from algorithms.binary_search.binary_search import binary_search
 
 
 @pytest.mark.parametrize(
-    ["arr", "target", "expected"],
+    ("arr", "target", "expected"),
     [
         ([1, 2, 3, 4, 5, 6, 7, 8, 9], 1, 0),  # Target is first element
         ([1, 2, 3, 4, 5, 6, 7, 8, 9], 9, 8),  # Target is last element
@@ -35,14 +35,14 @@ from binary_search.binary_search import binary_search
     ],
 )
 def test_binary_search(arr: list[int], target: int, expected: int) -> None:
-    """Test the binary_search functiom with valid inputs"""
+    """Test the binary_search functiom with valid inputs."""
     actual = binary_search(arr, target, 0, len(arr) - 1)
 
     assert actual == expected
 
 
 @pytest.mark.parametrize(
-    ["arr", "target"],
+    ("arr", "target"),
     [
         ([], 8),  # Empty array
         ([1, 2, 3, 4], None),  # Target is None
@@ -56,6 +56,8 @@ def test_invalid_input_binary_search(
     arr: list[int],
     target: int,
 ) -> None:
-    """Test the binary_search functiom with invalid inputs"""
-    with pytest.raises(ValueError):
+    """Test the binary_search functiom with invalid inputs."""
+    with pytest.raises(
+        ValueError, match="Both params 'arr' and 'target' need to be not none."
+    ):
         binary_search(arr, target, 0, len(arr) - 1)
