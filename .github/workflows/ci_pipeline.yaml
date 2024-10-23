@@ -6,7 +6,7 @@ on:
       - main  
 
 jobs:
-  test:
+  pytests:
     runs-on: ubuntu-latest
 
     steps:
@@ -26,5 +26,6 @@ jobs:
 
       - name: Run tests
         run: |
+          export PYTHONPATH=$(pwd)  # Set the PYTHONPATH
           poetry run pytest tests
 
