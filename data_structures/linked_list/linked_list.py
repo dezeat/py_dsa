@@ -22,6 +22,41 @@ class LinkedList:
     length: int = 0
     current_node: Node | None = None
 
+    @classmethod
+    def from_value(cls, value: int) -> LinkedList:
+        """Create a LinkedList with a single node."""
+        if value is None:
+            msg = "A valid input must be provided"
+            raise ValueError(msg)
+        node = Node(value)
+        return cls(head=node, tail=node, length=1)
+
+    @classmethod
+    def from_arr(cls, arr: list[int]) -> LinkedList:
+        """..."""
+        if not arr:
+            msg = "Array needs to be non empty"
+            raise ValueError(msg)
+
+        head: Node
+        tail: Node
+        previous: Node | None = None
+
+        for index, value in enumerate(arr):
+            cls.length += 1
+            current = Node(value)
+
+            if previous:
+                previous.next = current
+            if index == 0:
+                head = current
+            if index == len(arr) - 1:
+                tail = current
+
+            previous = current
+
+        return cls(head=head, tail=tail)
+
     def __len__(self) -> int:
         """..."""
         return self.length
@@ -74,16 +109,10 @@ class LinkedList:
         indices = [index for index, node in self if node.value == value]  # type: ignore  # noqa: PGH003
         return indices if indices else None
 
-    def create_from_node(self, node: Node) -> None:
-        """..."""
-        self.head = self.tail = node
-        self.tail.next = None
-        self._increase_length()
-
     def insert_end(self, node: Node) -> None:
         """..."""
-        if self.length == 0:
-            self.create_from_node(node)
+        if self.is_empty():
+            self.head = self.tail = node
 
         else:
             self.tail.next = node  # type: ignore  # noqa: PGH003
@@ -94,8 +123,8 @@ class LinkedList:
 
     def insert_start(self, node: Node) -> None:
         """..."""
-        if self.length == 0:
-            self.create_from_node(node)
+        if self.is_empty():
+            self.head = self.tail = node
 
         else:
             node.next = self.head
@@ -109,8 +138,8 @@ class LinkedList:
             msg = "Target index out of range"
             raise IndexError(msg)
 
-        if self.length == 0:
-            self.create_from_node(node)
+        if self.is_empty():
+            self.head = self.tail = node
             return
 
         if index == self.length:
@@ -176,7 +205,7 @@ class LinkedList:
 
     def delete_at_beginning(self) -> None:
         """..."""
-        if self.length == 0:
+        if self.is_empty():
             msg = "Cannott remove node from empty list"
             raise IndexError(msg)
 
@@ -185,7 +214,7 @@ class LinkedList:
 
     def delete_at_end(self) -> None:
         """..."""
-        if self.length == 0:
+        if self.is_empty():
             msg = "Cannott remove node from empty list"
             raise IndexError(msg)
 
@@ -198,30 +227,3 @@ class LinkedList:
     def traverse(self) -> list[Node]:
         """..."""
         return list(self)
-
-    @classmethod
-    def from_arr(cls, arr: list[int]) -> LinkedList:
-        """..."""
-        if not arr:
-            msg = "Array needs to be non empty"
-            raise ValueError(msg)
-
-        head: Node
-        tail: Node
-
-        previous: Node | None = None
-
-        for index, value in enumerate(arr):
-            cls.length += 1
-            current = Node(value)
-
-            if previous:
-                previous.next = current
-            if index == 0:
-                head = current
-            if index == len(arr) - 1:
-                tail = current
-
-            previous = current
-
-        return cls(head=head, tail=tail)
